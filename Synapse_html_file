@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Allergen Detector</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            margin: 50px;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+        }
+        input, button {
+            padding: 10px;
+            margin: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+        .result {
+            text-align: left;
+            margin-top: 20px;
+            padding: 15px;
+            background: #fff3cd;
+            border-left: 5px solid #ffa000;
+            border-radius: 5px;
+        }
+        .download-btn {
+            background-color: #007bff;
+        }
+        .download-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Allergen Detection & Report</h2>
+        <form method="POST">
+            <input type="text" name="food_name" placeholder="Enter food name" required>
+            <button type="submit">Check Allergens</button>
+        </form>
+        <body style="background-color:aquamarine">
+        {% if result %}
+            {% if result.error %}
+                <p class="error">{{ result.error }}</p>
+            {% else %}
+                <div class="result">
+                    <p><strong>Food Name:</strong> {{ result.food_name }}</p>
+                    <p><strong>Ingredients:</strong> {{ result.ingredients }}</p>
+                    <p><strong>Detected Allergens:</strong> {{ result.detected_allergens }}</p>
+                    <p><strong>Alternatives:</strong> {{ result.alternatives }}</p>
+                    <p><strong>Notes:</strong> {{ result.notes }}</p>
+                </div>
+                <form action="/download_pdf" method="POST">
+                    <input type="hidden" name="food_name" value="{{ result.food_name }}">
+                    <button class="download-btn" type="submit">Download PDF Report</button>
+                </form>
+            {% endif %}
+        {% endif %}
+    </div>
+</body>
+</html>
